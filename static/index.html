@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steam Library Stats</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="container py-4">
+    <h1 class="fade-in">Steam Library Stats</h1>
+    
+    <div class="sample-account fade-in-delay-1">
+      <h5>Don't have an account?</h5>
+      <p>Try using this sample account URL to see how the app works:</p>
+      <p><a href="#" onclick="document.getElementById('profile-url').value='https://steamcommunity.com/id/AbacusAvenger'; return false;">https://steamcommunity.com/id/AbacusAvenger</a> - The oldest known Steam account!</p>
+      <p class="small text-muted">Note: This account belongs to a Valve employee and was one of the first Steam accounts ever created.</p>
+    </div>
+    
+    <form id="steam-form" class="mb-4 fade-in-delay-1">
+      <div class="mb-3">
+        <label for="profile-url" class="form-label">Steam Profile URL</label>
+        <input type="text" class="form-control" id="profile-url" 
+               placeholder="https://steamcommunity.com/id/yourusername" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Calculate Size</button>
+    </form>
+    
+    <div id="loading" class="d-none">Loading...</div>
+    <div id="error" class="alert alert-danger d-none"></div>
+    
+    <div id="size-results" class="alert alert-success d-none mb-4 fade-in-delay-2">
+    </div>
+    
+    <div id="games-list" class="fade-in-delay-2"></div>
+  </div>
+  
+  <script>
+    window.addEventListener('load', function() {
+      document.getElementById('steam-form').reset();
+      document.getElementById('profile-url').value = '';
+    });
+    
+    localStorage.clear();
+    
+    document.getElementById('steam-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const profileUrl = document.getElementById('profile-url').value;
+      const loading = document.getElementById('loading');
+      const error = document.getElementById('error');
+      const sizeResults = document.getElementById('size-results');
+      const gamesList = document.getElementById('games-list');
+      
+      error.classList.add('d-none');
+      sizeResults.classList.add('d-none');
+      loading.classList.remove('d-none');
+      gamesList.innerHTML = '';
+      
+      const startTime = performance.now();
+      
+      try {
+        const steamIdMatch = profileUrl.match(/steamcommunity\.com\/(?:id|profiles)\/([^/]+)/);
+        if (!steamIdMatch) {
+          throw new Error('Invalid Steam profile URL');
+        }
+        
+        let steamId = steamIdMatch[1];
+        
+        if (profileUrl.includes('/id/')) {
+          const resolveResponse = await fetch(`/api/resolve?id=${encodeURIComponent(steamId)}`);
+          const resolveData = await resolveResponse.json();
+          
+          if (resolveData.response && resolveData.response.success === 1 && resolveData.response.steamid) {
+            steamId = resolveData.response.steamid;
+          } else {
+            throw new Error('Could not resolve Steam vanity URL');
+          }
+        }
+        
+        const sizeResponse = await fetch(`/api/calculate-size?id=${encodeURIComponent(steamId)}`);
+        
+        if (!sizeResponse.ok) {
+          const errorText = await sizeResponse.text();
+          throw new Error(errorText || 'Could not calculate library size - profile might be private');
+        }
+        
+        const sizeData = await sizeResponse.json();
+        
+        const endTime = performance.now();
+        const processingTime = ((endTime - startTime) / 1000).toFixed(2);
+        
+        sizeResults.innerHTML = `
+          <h4>Total Size: ${sizeData.total_size_display}</h4>
+          <p>Found your games in ${processingTime} seconds.</p>
+        `;
+        sizeResults.classList.remove('d-none');
+        
+        if (sizeData.games && sizeData.games.length > 0) {
+          let html = `<h4>Your Games (Showing ${sizeData.games.length} of ${sizeData.total_games}):</h4>`;
+          html += `<div class="table-responsive"><table class="table table-striped">`;
+          html += `<thead><tr><th>Game</th><th class="text-end">Size (GB)</th></tr></thead><tbody>`;
+          
+          sizeData.games.forEach(game => {
+            html += `
+              <tr>
+                <td>${game.name}</td>
+                <td class="text-end">${game.size.toFixed(2)}</td>
+              </tr>
+            `;
+          });
+          
+          html += `</tbody></table></div>`;
+          gamesList.innerHTML = html;
+        } else {
+          gamesList.innerHTML = `<div class="alert alert-info">No game size data found for this account. This could mean the games in this account are not in our database yet.</div>`;
+        }
+        
+      } catch (err) {
+        error.textContent = err.message;
+        error.classList.remove('d-none');
+      } finally {
+        loading.classList.add('d-none');
+      }
+    });
+  </script>
+</body>
+</html>

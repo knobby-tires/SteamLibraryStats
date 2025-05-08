@@ -1,0 +1,214 @@
+body {
+  background-color: #0e1621;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+}
+
+.container {
+  background-color: #1e2838;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  margin-top: 30px;
+  border: 2px solid #66c0f4;
+}
+
+h1 {
+  color: #ffffff;
+  margin-bottom: 25px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+h4 {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+p {
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.btn-primary {
+  background-color: #1a9fff;
+  border-color: #1a9fff;
+  font-weight: bold;
+  padding: 10px 24px;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.btn-primary:hover {
+  background-color: #66c0f4;
+  border-color: #66c0f4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.form-control {
+  background-color: #000000;
+  border-color: #1a9fff;
+  color: #ffffff;
+  padding: 12px;
+  font-size: 1.1rem;
+}
+
+.form-control:focus {
+  background-color: #000000;
+  border-color: #66c0f4;
+  color: #ffffff;
+  box-shadow: 0 0 0 0.25rem rgba(102, 192, 244, 0.4);
+}
+
+.form-control::placeholder {
+  color: #8ba6b6;
+}
+
+.form-label {
+  color: #ffffff;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.alert-success {
+  background-color: #2f5016;
+  border-color: #87a94c;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+}
+
+.alert-danger {
+  background-color: #6b1e1d;
+  border-color: #a94c4c;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+}
+
+.alert-info {
+  background-color: #122436;
+  border-color: #1a9fff;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+}
+
+.table {
+  color: #ffffff;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 1.1rem;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #0e1621;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: #1e2838;
+}
+
+thead {
+  background-color: #1a9fff;
+  color: white;
+}
+
+thead th {
+  padding: 14px !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+}
+
+tbody td {
+  padding: 14px !important;
+  vertical-align: middle;
+  font-size: 1.1rem;
+}
+
+.table tr:hover {
+  background-color: #324254 !important;
+}
+
+#loading {
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  padding: 30px;
+  font-size: 1.3rem;
+}
+
+.sample-account {
+  background-color: #122436;
+  border: 2px solid #66c0f4;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.sample-account h5 {
+  color: #ffffff;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Make the sample account text white */
+.sample-account p {
+  margin-bottom: 10px;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.sample-account a {
+  color: #66c0f4;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.sample-account a:hover {
+  color: #1a9fff;
+  text-decoration: underline;
+}
+
+/* Make the note text gray */
+.small.text-muted {
+  color: #8ba6b6 !important; /* Light gray color */
+  font-size: 0.95rem;
+}
+
+/* Add some subtle animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.2s forwards;
+}
+
+.fade-in-delay-2 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.4s forwards;
+}
